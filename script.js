@@ -1,4 +1,4 @@
-
+//电脑选择
 function getComputerChoice()
 {
     let values = Math.random() * 9;
@@ -16,83 +16,57 @@ function getComputerChoice()
 
 }
 
-function getHumanChoice(){
-    let choice = prompt("rock paper scissors?").toLowerCase();
 
-    if(choice=="rock")
+let playerScore = 0;
+let computerScore = 0;
+
+
+function playRound(playerSelection)
+{
+    if(playerScore >=5 || computerScore >=5) return;
+
+    const computerSelection = getComputerChoice();
+    let result = "";
+
+    if(playerSelection == computerSelection)
     {
-        return "rock";
+        result = `It^s a tie！Both chose ${playerSelection}`;
     }
-    else if(choice=="paper")
+    else if((playerSelection =="rock"&&computerSelection == "scissors")||
+    (playerSelection =="scissors"&&computerSelection == "paper")||
+    (playerSelection =="paper"&&computerSelection == "rock"))
     {
-        return "paper";
-    }
-    else if(choice=="scissors")
-    {
-        return "scissors";
+        playerScore++;
+        result = `You lose! ${playerSelection} beats ${computerSelection}`;
     }
     else
     {
-        return "try again";
-    }
-}
-
-let humanScore = 0;
-let computerScore = 0;
-
-let computerChoice;
-let humanChoice;
-
-function playRound(humanChoice,computerChoice)
-{
-    humanChoice = getHumanChoice();
-    computerChoice = getComputerChoice();
-
-    if(humanChoice=="rock"&&computerChoice=="scissors"){
-        console.log("You win! Rock beats Scissors");
-        humanScore++;
-    }
-    else if(humanChoice=="rock"&&computerChoice=="paper"){
-        console.log("You lose! Paper beats Rock");
         computerScore++;
+        result = `You lose! ${computerSelection} beats ${playerSelection}`;
     }
-    else if(humanChoice=="paper"&&computerChoice=="rock"){
-        console.log("You win! Paper beats Rock");
-        humanScore++;
-    }
-    else if(humanChoice=="paper"&&computerChoice=="scissors"){
-        console.log("You lose! Scissors beats Paper");
-        computerScore++;
-    }
-    else if(humanChoice=="scissors"&&computerChoice=="paper"){
-        console.log("You win! Scissors beats Paper");
-        humanScore++;
-    }
-    else if(humanChoice=="scissors"&&computerChoice=="rock"){
-        console.log("You lose! Rock beats Scissors");
-        computerScore++;
-    }
-    else{
-        console.log("No Winner!");
-    }
+    
+    //更新UI
+    document.getElementById("result").textContent = result;
+    document.getElementById("score").textContent = `Player:${playerScore} | Computer：${computerScore}`;
 
-    console.log("玩家分数：" + humanScore);
-    console.log("电脑分数：" + computerScore);
-
-}
-
-
-
-
-function playGame()
-{    
-    for(let i=0;i<5;i++)
+    //检查是否有玩家达到5分
+    if(playerScore == 5)
+    { 
+        document.getElementById("result").textContent = "You won the game!";
+    } 
+    else if(computerScore == 5)
     {
-        playRound(humanChoice,computerChoice)
+        document.getElementById("result").textContent = "Computer won the game!";
     }
+    
 
 }
 
-playGame();
+//绑定按钮事件
+document.getElementById("rock").addEventListener("click",() => playRound("rock"));
+document.getElementById("paper").addEventListener("click",() => playRound("paper"));
+document.getElementById("scissors").addEventListener("click",() => playRound("scissors"));
+
+
 
 
